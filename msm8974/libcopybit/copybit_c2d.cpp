@@ -20,7 +20,7 @@
 #include <cutils/log.h>
 #include <sys/resource.h>
 #include <sys/prctl.h>
-
+#include <cutils/threads.h>
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
@@ -218,7 +218,7 @@ static void* c2d_wait_loop(void* ptr) {
     copybit_context_t* ctx = (copybit_context_t*)(ptr);
     char thread_name[64] = "copybitWaitThr";
     prctl(PR_SET_NAME, (unsigned long) &thread_name, 0, 0, 0);
-    setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
+    androidSetThreadPriority(0, HAL_PRIORITY_URGENT_DISPLAY);
 
     while(ctx->stop_thread == false) {
         pthread_mutex_lock(&ctx->wait_cleanup_lock);
